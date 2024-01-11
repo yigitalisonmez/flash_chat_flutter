@@ -18,11 +18,6 @@ class FlashChat extends StatelessWidget {
         RegistrationScreen.route: (context) => RegistrationScreen(),
         ChatScreen.route: (context) => ChatScreen(),
       },
-      theme: ThemeData.dark().copyWith(
-        textTheme: TextTheme(
-          bodyMedium: TextStyle(color: Colors.black54),
-        ),
-      ),
     );
   }
 }
