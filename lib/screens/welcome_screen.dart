@@ -1,6 +1,7 @@
 import 'package:flash_chat_flutter/screens/login_screen.dart';
 import 'package:flash_chat_flutter/screens/registration_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
 
 class WelcomeScreen extends StatefulWidget {
   static const String route = '/';
@@ -17,8 +18,8 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   void initState() {
     super.initState();
     controller =
-        AnimationController(vsync: this, duration: const Duration(seconds: 2));
-    animation = ColorTween(begin: Colors.yellow, end: Colors.lightBlue[100])
+        AnimationController(vsync: this, duration: const Duration(seconds: 1));
+    animation = ColorTween(begin: Colors.blueGrey, end: Colors.white)
         .animate(controller!);
     controller!.forward();
     /*   animation = CurvedAnimation(parent: controller!, curve: Curves.decelerate);
@@ -60,13 +61,19 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                     height: 60.0,
                   ),
                 ),
-                Text(
-                  'Flash Chat',
-                  style: TextStyle(
-                    fontSize: 45.0,
-                    fontWeight: FontWeight.w900,
-                  ),
-                ),
+                AnimatedTextKit(
+                    animatedTexts: [
+                      TypewriterAnimatedText(
+                        'Flash Chat',
+                        textStyle: const TextStyle(
+                          fontSize: 45.0,
+                          fontWeight: FontWeight.w900,
+                        ),
+                        speed: Duration(milliseconds: 100),
+                      ),
+                    ],
+                    totalRepeatCount: 2,
+                    pause: const Duration(milliseconds: 1000))
               ],
             ),
             SizedBox(
@@ -118,3 +125,11 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     );
   }
 }
+
+/*Text(
+'Flash Chat',
+style: TextStyle(
+fontSize: 45.0,
+fontWeight: FontWeight.w900,
+),
+),*/
