@@ -19,8 +19,8 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   void initState() {
     super.initState();
     controller =
-        AnimationController(vsync: this, duration: const Duration(seconds: 1));
-    animation = ColorTween(begin: Colors.blueGrey, end: Colors.white)
+        AnimationController(vsync: this, duration: const Duration(seconds: 3));
+    animation = ColorTween(begin: Colors.lightBlue, end: Colors.white)
         .animate(controller!);
     controller!.forward();
     /*   animation = CurvedAnimation(parent: controller!, curve: Curves.decelerate);
