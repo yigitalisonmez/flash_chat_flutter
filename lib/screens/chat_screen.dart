@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 final _firestore = FirebaseFirestore.instance;
+User? loggedInUser;
 
 class ChatScreen extends StatefulWidget {
   static const String route = '/chat';
@@ -14,7 +15,7 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   final _auth = FirebaseAuth.instance;
   final textFieldController = TextEditingController();
-  User? loggedInUser;
+
   String? messageText;
 
   Future<void> getCurrentUser() async {
@@ -105,35 +106,45 @@ class _ChatScreenState extends State<ChatScreen> {
 }
 
 class MessageBubble extends StatelessWidget {
-  MessageBubble(this.sender, this.text);
+  MessageBubble(this.sender, this.text, this.isCurrentUser);
 
   final String sender;
   final String text;
+  final bool isCurrentUser;
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.all(10.0),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment:
+            isCurrentUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
           Text(
             sender,
             style: TextStyle(fontSize: 12.0, color: Colors.black54),
           ),
           Material(
-            borderRadius: BorderRadius.circular(30.0),
+            borderRadius: isCurrentUser
+                ? BorderRadius.only(
+                    topLeft: Radius.circular(30.0),
+                    bottomLeft: Radius.circular(30.0),
+                    bottomRight: Radius.circular(30.0))
+                : BorderRadius.only(
+                    topRight: Radius.circular(30.0),
+                    bottomLeft: Radius.circular(30.0),
+                    bottomRight: Radius.circular(30.0)),
             elevation: 5.0,
             child: Padding(
               padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
               child: Text(
                 text,
                 style: TextStyle(
-                  color: Colors.white,
+                  color: isCurrentUser ? Colors.white : Colors.black54,
                   fontSize: 15.0,
                 ),
               ),
             ),
-            color: Colors.lightBlueAccent,
+            color: isCurrentUser ? Colors.lightBlueAccent : Colors.white,
           ),
         ],
       ),
@@ -161,7 +172,8 @@ class MessageStreamer extends StatelessWidget {
           for (var message in messages) {
             final messageText = message.get('text');
             final messageSender = message.get('sender');
-            messageBubbles.add(MessageBubble(messageSender, messageText));
+            messageBubbles.add(MessageBubble(messageSender, messageText,
+                messageSender == loggedInUser!.email));
           }
 
           return Expanded(
